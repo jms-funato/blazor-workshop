@@ -1,3 +1,38 @@
 ﻿@page "/"
+@inject HttpClient HttpClient
 
-<h1>Blazing Pizzas</h1>
+<div class="main">
+    <ul class="pizza-cards">
+        @if (specials != null)
+        {
+            @foreach (var special in specials)
+            {
+                <li @onclick="@(() => Console.WriteLine(special.Name))" style="background-image: url('@special.ImageUrl')">
+                    <div class="pizza-info">
+                        <span class="title">@special.Name</span>
+                        @special.Description
+                        <span class="price">@special.GetFormattedBasePrice()</span>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+    <RadzenButton Click="@((args) => ButtonClick(args, "Button with text and icon"))" Text="Login" Icon="account_circle" Style="margin-bottom: 20px; width: 150px"/>
+</div>
+
+@code {
+    List<PizzaSpecial> specials;
+
+    protected async override Task OnInitializedAsync()
+    {
+        specials = await HttpClient.GetJsonAsync<List<PizzaSpecial>>("specials");
+    }
+
+    Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
+
+    void ButtonClick(MouseEventArgs args, string buttonName)
+    {
+        events.Add(DateTime.Now, $"{buttonName} clicked");
+        StateHasChanged();
+    }
+}
