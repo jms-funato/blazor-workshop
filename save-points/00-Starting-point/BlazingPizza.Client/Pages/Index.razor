@@ -7,7 +7,7 @@
         {
             @foreach (var special in specials)
             {
-                <li @onclick="@(() => Console.WriteLine(special.Name))" style="background-image: url('@special.ImageUrl')">
+                <li @onclick="@(() => ShowConfigurePizzaDialog(special))" style="background-image: url('@special.ImageUrl')">
                     <div class="pizza-info">
                         <span class="title">@special.Name</span>
                         @special.Description
@@ -20,8 +20,15 @@
     <RadzenButton Click="@((args) => ButtonClick(args, "Button with text and icon"))" Text="Login" Icon="account_circle" Style="margin-bottom: 20px; width: 150px"/>
 </div>
 
+@if (showingConfigureDialog)
+{
+    <ConfigurePizzaDialog Pizza="configuringPizza" OnCancel="CancelConfigurePizzaDialog"/>
+}
+
 @code {
     List<PizzaSpecial> specials;
+    Pizza configuringPizza;
+    bool showingConfigureDialog;
 
     protected async override Task OnInitializedAsync()
     {
@@ -34,5 +41,24 @@
     {
         events.Add(DateTime.Now, $"{buttonName} clicked");
         StateHasChanged();
+    }
+
+    void ShowConfigurePizzaDialog(PizzaSpecial special)
+    {
+        configuringPizza = new Pizza()
+        {
+            Special = special,
+            SpecialId = special.Id,
+            Size = Pizza.DefaultSize,
+            Toppings = new List<PizzaTopping>(),
+        };
+
+        showingConfigureDialog = true;
+    }
+
+    void CancelConfigurePizzaDialog()
+    {
+        configuringPizza = null;
+        showingConfigureDialog = false;
     }
 }
