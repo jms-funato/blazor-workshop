@@ -10,6 +10,7 @@
     <link href="css/ribbonButton.css" rel="stylesheet" />
     <link href="_content/BlazingPizza.ComponentsLibrary/leaflet/leaflet.css" rel="stylesheet" />
     <link rel="stylesheet" href="_content/Radzen.Blazor/css/default.css">
+    <link rel="manifest" href="manifest.json" />
     <title>Blazing Pizza</title>
 </head>
 <body>
@@ -23,5 +24,6 @@
     <script src="_content/BlazingPizza.ComponentsLibrary/deliveryMap.js"></script>
     <script src="_content/BlazingPizza.ComponentsLibrary/leaflet/leaflet.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
 </body>
 </html>
