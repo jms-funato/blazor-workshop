@@ -4,7 +4,6 @@ namespace BlazingPizza.Client
 {
     public class OrderState
     {
-
         public bool IsSubmitting { get; set; }
 
         public bool ShowingConfigureDialog { get; private set; }
@@ -39,6 +38,11 @@ namespace BlazingPizza.Client
             ConfiguringPizza = null;
 
             ShowingConfigureDialog = false;
+        }
+
+        public void ReplaceOrder(Order order)
+        {
+            Order = order;
         }
 
         public void ResetOrder()
