@@ -17,7 +17,7 @@ namespace BlazingPizza.Server
         public UserInfo GetUser()
         {
             return User.Identity.IsAuthenticated
-                ? new UserInfo { Name = User.Identity.Name, IsAuthenticated = true }
+                ? new UserInfo { NAME = User.Identity.Name, IsAuthenticated = true }
                 : LoggedOutUser;
         }
 
