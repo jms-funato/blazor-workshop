@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BlazingPizza.Shared.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazingPizza.Server
 {
-    public class PizzaStoreContext : DbContext
+    public class PizzaStoreContext : IdentityDbContext
     {
         public PizzaStoreContext()
         {
@@ -13,6 +15,8 @@ namespace BlazingPizza.Server
         {
         }
 
+        public DbSet<Person> People { get; set; }
+
         public DbSet<Order> Orders { get; set; }
 
         public DbSet<Pizza> Pizzas { get; set; }
@@ -22,6 +26,7 @@ namespace BlazingPizza.Server
         public DbSet<Topping> Toppings { get; set; }
 
         public DbSet<NotificationSubscription> NotificationSubscriptions { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +37,8 @@ namespace BlazingPizza.Server
 
             // Inline the Lat-Long pairs in Order rather than having a FK to another table
             modelBuilder.Entity<Order>().OwnsOne(o => o.DeliveryLocation);
+
+            modelBuilder.Entity<LatLong>().HasNoKey();
         }
     }
 }

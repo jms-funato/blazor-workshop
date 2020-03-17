@@ -23,10 +23,13 @@ namespace BlazingPizza.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<PizzaStoreContext>(options => 
+                options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContext<PizzaStoreContext>(options => options.UseSqlite("Data Source=pizza.db"));
+
             services.AddMvc()
                 .AddNewtonsoftJson();
-
-            services.AddDbContext<PizzaStoreContext>(options => options.UseSqlite("Data Source=pizza.db"));
 
             services.AddResponseCompression(options =>
             {

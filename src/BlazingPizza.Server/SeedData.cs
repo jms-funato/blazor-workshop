@@ -1,4 +1,6 @@
-﻿namespace BlazingPizza.Server
+﻿using BlazingPizza.Shared.Models;
+
+namespace BlazingPizza.Server
 {
     public static class SeedData
     {

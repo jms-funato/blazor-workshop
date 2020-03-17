@@ -1,4 +1,4 @@
-﻿namespace BlazingPizza
+﻿namespace BlazingPizza.Shared.Models
 {
     public class LatLong
     {

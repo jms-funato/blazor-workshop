@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BlazingPizza.Shared.Models;
 
 namespace BlazingPizza.Client
 {

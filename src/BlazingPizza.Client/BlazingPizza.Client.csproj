@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="15.0.1" />
+    <PackageReference Include="Markdig" Version="0.17.1" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="$(BlazorVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="$(BlazorVersion)" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="$(BlazorVersion)" />

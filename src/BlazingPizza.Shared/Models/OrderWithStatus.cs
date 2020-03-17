@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BlazingPizza
+namespace BlazingPizza.Shared.Models
 {
     public class OrderWithStatus
     {
