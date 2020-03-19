@@ -2,6 +2,7 @@
 @inject HttpClient http
 @inject IJSRuntime js
 @using System.IO
+@using System.Text.Json
 
 <h3>People</h3>
 
@@ -13,59 +14,112 @@
     </Authorized>
 </AuthorizeView>
 
-@if (people == null)
-{
-    <text>Loading...</text>
-}
-else if (people.Length == 0)
-{
-    <text>No Data</text>
-}
-else
-{
-    <div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Id</th>
-                    <th>Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var person in people)
-                {
-                    <tr>
-                        <td>
-                            <AuthorizeView>
-                                <Authorized>
-                                    <a class="btn btn-success" href="people/edit/@person.Id">Edit</a>
-                                    <button class="btn btn-danger" @onclick="@(()=>DeletePerson(person.Id))">Delete</button>
-                                </Authorized>
-                            </AuthorizeView>
-                        </td>
-                        <td>@person.Id</td>
-                        <td>@person.Name</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <button @onclick="ExportAsCSV">Export CSV</button>
-    </div>
+<div class="form-inline">
+    <label class="sr-only" for="filter-name">Filter</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Filter by Name"
+           @bind="nameFilter"/>
+    <button type="button" class="btn btn-primary mr-sm-2 mb-2"
+            @onclick="Filter">
+        Filter
+    </button>
+    <button type="button" class="btn btn-danger mr-sm-2 mb-2"
+            @onclick="Clear">
+        Clear
+    </button>
+</div>
 
-}
+<Pagination TotaPagesQuantity="totalPageQuantity" CurrentPage="currentPage" Radius="2" SelectedPage="SelectedPage"></Pagination>
+
+<div>
+    <GenericList Elements="people">
+        <NullTemplate>
+            <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"/>
+        </NullTemplate>
+        <WithElementsTemplate>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Id</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var person in people)
+                    {
+                        <tr>
+                            <td>
+                                <AuthorizeView>
+                                    <Authorized>
+                                        <a class="btn btn-success" href="people/edit/@person.Id">Edit</a>
+                                        <button class="btn btn-danger" @onclick="@(()=>DeletePerson(person.Id))">Delete</button>
+                                    </Authorized>
+                                </AuthorizeView>
+                            </td>
+                            <td>@person.Id</td>
+                            <td>@person.Name</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <button @onclick="ExportAsCSV">Export as CSV</button>
+        </WithElementsTemplate>
+    </GenericList>
+
+    @*<RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="4"
+                    AllowSorting="true" Data="@people" TItem="Person" ColumnWidth="200px">
+            <Columns>
+                <RadzenGridColumn TItem="Person" Property="Id" Title="ID"/>
+                <RadzenGridColumn TItem="Person" Property="Name" Title="Name"/>
+            </Columns>
+        </RadzenGrid>*@
+</div>
 
 @code {
-    Person[] people { get; set; }
+    List<Person> people { get; set; }
+    private int totalPageQuantity;
+    private int currentPage = 1;
+    private string nameFilter = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
         await LoadPeople();
     }
 
-    async Task LoadPeople()
+    private async Task SelectedPage(int page)
     {
-        people = await http.GetJsonAsync<Person[]>("api/people");
+        currentPage = page;
+        await LoadPeople(page);
+    }
+
+    private async Task Filter()
+    {
+        currentPage = 1;
+        await LoadPeople();
+    }
+
+    private async Task Clear()
+    {
+        nameFilter = string.Empty;
+        currentPage = 1;
+        await LoadPeople();
+    }
+
+    async Task LoadPeople(int page = 1, int quantityPerPage = 10)
+    {
+        var httpResponse = await http.GetAsync($"api/people?page={page}&quantityPerPage={quantityPerPage}&name={nameFilter}");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            totalPageQuantity = int.Parse(httpResponse.Headers.GetValues("pagesQuantity").FirstOrDefault());
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            people = JsonSerializer.Deserialize<List<Person>>(responseString,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            // handle error
+        }
+
     }
 
     async Task DeletePerson(int personId)
@@ -96,4 +150,5 @@ else
             js.SaveAs("people.csv", arr);
         }
     }
+
 }

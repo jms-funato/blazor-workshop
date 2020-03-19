@@ -1,58 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using BlazingPizza.Server;
+using BlazingPizza.Server.Helpers;
 using BlazingPizza.Shared.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazingPizza.Server.Controllers
 {
-
     [ApiController]
     [Route("api/[Controller]")]
-    [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PeopleController : ControllerBase
     {
-        private readonly PizzaStoreContext _context;
+        private readonly PizzaStoreContext context;
 
         public PeopleController(PizzaStoreContext context)
         {
-            _context = context;
+            this.context = context;
         }
-
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<List<Person>>> Get() 
+        public async Task<ActionResult<List<Person>>> Get([FromQuery]PaginationDTO pagination,
+            [FromQuery] string name)
         {
-            return await _context.People.ToListAsync();
+            var queryable = context.People.AsQueryable();
+            if (!string.IsNullOrEmpty(name))
+            {
+                queryable = queryable.Where(x => x.Name.Contains(name));
+            }
+            await HttpContext.InsertPaginationParameterInResponse(queryable, pagination.QuantityPerPage);
+            return await queryable.Paginate(pagination).ToListAsync();
         }
 
-        [HttpGet("{id}",Name = "GetPerson")]
+        [HttpGet("{id}", Name = "GetPerson")]
         [AllowAnonymous]
         public async Task<ActionResult<Person>> Get(int id)
         {
-            return await _context.People.FirstOrDefaultAsync(x => x.Id == id);
+            return await context.People.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         [HttpPost]
         public async Task<ActionResult> Post(Person person)
         {
-            _context.Add(person);
-            await _context.SaveChangesAsync();
+            context.Add(person);
+            await context.SaveChangesAsync();
             return new CreatedAtRouteResult("GetPerson", new { id = person.Id }, person);
         }
 
         [HttpPut]
         public async Task<ActionResult> Put(Person person)
         {
-            _context.Entry(person).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            context.Entry(person).State = EntityState.Modified;
+            await context.SaveChangesAsync();
             return NoContent();
         }
 
@@ -60,12 +63,10 @@ namespace BlazingPizza.Server.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var person = new Person { Id = id };
-            _context.Remove(person);
-            await _context.SaveChangesAsync();
+            context.Remove(person);
+            await context.SaveChangesAsync();
             return NoContent();
         }
-
-
 
         // GET: People
         //public async Task<IActionResult> Index()
@@ -98,7 +99,7 @@ namespace BlazingPizza.Server.Controllers
         //}
 
         //// POST: People/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for
         //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
         //[ValidateAntiForgeryToken]
@@ -130,7 +131,7 @@ namespace BlazingPizza.Server.Controllers
         //}
 
         //// POST: People/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for
         //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
         //[ValidateAntiForgeryToken]
