@@ -1,14 +1,19 @@
+using System;
 using System.Linq;
 using System.Net.Mime;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BlazingPizza.Server
 {
@@ -26,7 +31,26 @@ namespace BlazingPizza.Server
 
             services.AddDbContext<PizzaStoreContext>(options => 
                 options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+
             //services.AddDbContext<PizzaStoreContext>(options => options.UseSqlite("Data Source=pizza.db"));
+
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<PizzaStoreContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["jwt:key"])),
+                    ClockSkew = TimeSpan.Zero
+                }); 
+
 
             services.AddMvc()
                 .AddNewtonsoftJson();
@@ -66,12 +90,12 @@ namespace BlazingPizza.Server
             }
 
             app.UseStaticFiles();
+            app.UseClientSideBlazorFiles<Client.Startup>();
 
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseClientSideBlazorFiles<Client.Startup>();
+            
 
             app.UseEndpoints(endpoints =>
             {

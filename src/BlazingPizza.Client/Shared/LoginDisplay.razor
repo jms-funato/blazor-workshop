@@ -7,11 +7,13 @@
             <img src="img/user.svg" />
             <div>
                 <span class="username">@context.User.Identity.Name</span>
-                <a class="sign-out" href="user/signout">Sign out</a>
+                @*<a class="sign-out" href="user/signout">Sign out</a>*@
+                <a class="sign-out" href="logout">Log out</a>
             </div>
         </Authorized>
         <NotAuthorized>
-            <a class="sign-in" href="user/signin">Sign in</a>
+            @*<a class="sign-in" href="user/signin">Sign in</a>*@
+            <a class="sign-in" href="login">Log in</a>
         </NotAuthorized>
     </AuthorizeView>
 </div>

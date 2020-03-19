@@ -1,13 +1,17 @@
-﻿@page "/people"
+@page "/people"
 @inject HttpClient http
 @inject IJSRuntime js
 @using System.IO
 
 <h3>People</h3>
 
-<div>
-    <a class="btn btn-success" href="people/create">New Person</a>
-</div>
+<AuthorizeView>
+    <Authorized>
+        <div>
+            <a class="btn btn-success" href="people/create">New Person</a>
+        </div>
+    </Authorized>
+</AuthorizeView>
 
 @if (people == null)
 {
@@ -33,8 +37,12 @@ else
                 {
                     <tr>
                         <td>
-                            <a class="btn btn-success" href="people/edit/@person.Id">Edit</a>
-                            <button class="btn btn-danger" @onclick="@(()=>DeletePerson(person.Id))">Delete</button>
+                            <AuthorizeView>
+                                <Authorized>
+                                    <a class="btn btn-success" href="people/edit/@person.Id">Edit</a>
+                                    <button class="btn btn-danger" @onclick="@(()=>DeletePerson(person.Id))">Delete</button>
+                                </Authorized>
+                            </AuthorizeView>
                         </td>
                         <td>@person.Id</td>
                         <td>@person.Name</td>
@@ -45,7 +53,6 @@ else
         <button @onclick="ExportAsCSV">Export CSV</button>
     </div>
 
-    
 }
 
 @code {
@@ -65,7 +72,7 @@ else
     {
         //await js.DisplayMessage("削除確認","削除しますか?",SweetAlertMessageType.success);
         var personSeleted = people.First(x => x.Id == personId);
-        if (await js.Confirm("ユーザー削除", $"ユーザー:{personSeleted.Name}を削除しますか?",SweetAlertMessageType.question))
+        if (await js.Confirm("ユーザー削除", $"ユーザー:{personSeleted.Name}を削除しますか?", SweetAlertMessageType.question))
         {
             await http.DeleteAsync($"api/people/{personId}");
             await LoadPeople();

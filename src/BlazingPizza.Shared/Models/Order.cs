@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace BlazingPizza.Shared.Models
@@ -14,6 +15,7 @@ namespace BlazingPizza.Shared.Models
 
         public Address DeliveryAddress { get; set; } = new Address();
 
+        [NotMapped]
         public LatLong DeliveryLocation { get; set; }
 
         public List<Pizza> Pizzas { get; set; } = new List<Pizza>();

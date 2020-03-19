@@ -1,4 +1,5 @@
 ﻿using BlazingPizza.Shared.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,7 +27,7 @@ namespace BlazingPizza.Server
         public DbSet<Topping> Toppings { get; set; }
 
         public DbSet<NotificationSubscription> NotificationSubscriptions { get; set; }
-        
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,7 +39,9 @@ namespace BlazingPizza.Server
             // Inline the Lat-Long pairs in Order rather than having a FK to another table
             modelBuilder.Entity<Order>().OwnsOne(o => o.DeliveryLocation);
 
-            modelBuilder.Entity<LatLong>().HasNoKey();
+            modelBuilder.Entity<IdentityUserLogin<string>>().HasNoKey();
+            modelBuilder.Entity<IdentityUserRole<string>>().HasNoKey();
+            modelBuilder.Entity<IdentityUserToken<string>>().HasNoKey();
         }
     }
 }

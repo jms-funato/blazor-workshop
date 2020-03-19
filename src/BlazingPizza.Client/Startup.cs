@@ -13,8 +13,15 @@ namespace BlazingPizza.Client
 
             // Add auth services
             services.AddAuthorizationCore();
+            services.AddScoped<JWTAuthenticationProvider>();
+            services.AddScoped<AuthenticationStateProvider, JWTAuthenticationProvider>(
+                provider => provider.GetRequiredService<JWTAuthenticationProvider>());
+            services.AddScoped<ILoginService, JWTAuthenticationProvider>(
+                provider => provider.GetRequiredService<JWTAuthenticationProvider>());
+
+
             //services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
-            services.AddScoped<AuthenticationStateProvider, DummyAuthStateProvider>();
+            //services.AddScoped<AuthenticationStateProvider, DummyAuthStateProvider>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)

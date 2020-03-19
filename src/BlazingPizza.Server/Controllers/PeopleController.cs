@@ -7,12 +7,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BlazingPizza.Server;
 using BlazingPizza.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace BlazingPizza.Server.Controllers
 {
 
     [ApiController]
     [Route("api/[Controller]")]
+    [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
     public class PeopleController : ControllerBase
     {
         private readonly PizzaStoreContext _context;
@@ -24,12 +27,14 @@ namespace BlazingPizza.Server.Controllers
 
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Person>>> Get() 
         {
             return await _context.People.ToListAsync();
         }
 
         [HttpGet("{id}",Name = "GetPerson")]
+        [AllowAnonymous]
         public async Task<ActionResult<Person>> Get(int id)
         {
             return await _context.People.FirstOrDefaultAsync(x => x.Id == id);
