@@ -1,7 +1,11 @@
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 
 <div class="top-bar">
-    <img class="logo" src="img/ANDEN_LOGO.svg"/>
+    <div style="display:inline-flex" class="d-flex align-items-center justify-content-center">
+        <a href=""><img class="logo" src="img/ANDEN_LOGO_light.svg"></a>
+        <h3 class="m-2">工数管理指標WEB</h3>
+        <h5 class="m-2">Version @appState.AppVersion</h5>
+    </div>
 
     <NavLink href="" class="nav-tab" Match="NavLinkMatch.All">
         <img src="img/pizza-slice.svg"/>
@@ -14,25 +18,24 @@
     </NavLink>
 
     <NavLink href="people" class="nav-tab">
-        <img src="img/people-24px.svg"/>
+        <RadzenIcon Icon="people" Style="color:white;font-size:48px"/>
         <div>People Masta</div>
     </NavLink>
 
     <NavLink href="counter" class="nav-tab">
-        <img src="img/add_circle_outline-black-18dp.svg"/>
+        <a href=""><RadzenIcon Icon="add_circle_outline" Style="color:white;font-size:48px" /></a>
         <div>Counter</div>
     </NavLink>
 
     <NavLink href="charttest" class="nav-tab">
-        <img src="img/chart.svg"/>
+        <img src="img/chart_light.svg"/>
         <div>Counter</div>
     </NavLink>
 
     <LoginDisplay/>
 </div>
 
-@*<div class="content mx-auto px-4" style="margin-bottom: 20px;">*@
-    <div class="mx-auto px-4" style="margin-bottom: 20px;">
+<div class="mx-auto px-4" style="margin-bottom: 20px;">
     <CascadingValue Value="@appState">
         @Body
     </CascadingValue>
@@ -45,6 +48,7 @@
     {
         public string Color { get; set; } = "red";
         public string Size { get; set; } = "12px";
+        public string AppVersion { get; set; } = "0.9.0.0";
     }
 
 }

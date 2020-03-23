@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using BlazingPizza.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
@@ -9,13 +8,11 @@ namespace BlazingPizza.Client.Pages
 {
     public partial class Counter
     {
-
         [CascadingParameter] public AppState AppState { get; set; }
-        
 
-        [Inject] SingletionService singletion { get; set; }
-        [Inject] TransientService transient { get; set; }
-        [Inject] IJSRuntime js { get; set; }
+        [Inject] private SingletionService singletion { get; set; }
+        [Inject] private TransientService transient { get; set; }
+        [Inject] private IJSRuntime js { get; set; }
 
         private int currentCount = 0;
         private static int currentCountStatic = 0;
@@ -42,7 +39,6 @@ namespace BlazingPizza.Client.Pages
             }
         }
 
-        
         private async Task IncrementCountJavaScript()
         {
             //C#(IncrementCountJavaScript) → js(dotnetInstanceInvocation) → C#(IncrementCount)
@@ -50,13 +46,11 @@ namespace BlazingPizza.Client.Pages
                 DotNetObjectReference.Create(this));
         }
 
-
         //jsからのメソッドコール
         [JSInvokable]
         public static Task<int> GetCurrentCount()
         {
             return Task.FromResult(currentCountStatic);
         }
-
     }
 }

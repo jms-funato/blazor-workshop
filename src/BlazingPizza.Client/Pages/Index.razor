@@ -1,76 +1,63 @@
-@page "/"
+﻿@page "/"
 @attribute [Authorize]
-@inject HttpClient HttpClient
-@inject OrderState OrderState
-@inject NavigationManager NavigationManager
-@inject IJSRuntime JS
+@inject HttpClient http
+@inject NavigationManager navi
+@inject IJSRuntime js
 
-
-<div class="main">
-    <ul class="pizza-cards">
-        @if (specials != null)
-        {
-            @foreach (var special in specials)
-            {
-                <li @onclick="@(() => OrderState.ShowConfigurePizzaDialog(special))" style="background-image: url('@special.ImageUrl')">
-                    <div class="pizza-info">
-                        <span class="title">@special.Name</span>
-                        @special.Description
-                        <span class="price">@special.GetFormattedBasePrice()</span>
-                    </div>
-                </li>
-            }
-        }
-    </ul>
-</div>
-
-<div class="sidebar">
-    @if (Order.Pizzas.Any())
-    {
-        <div class="order-contents">
-            <h2>Your order</h2>
-
-            @foreach (var configuredPizza in Order.Pizzas)
-            {
-                <ConfiguredPizzaItem Pizza="configuredPizza" OnRemoved="@(() => RemovePizza(configuredPizza))" />
-            }
-        </div>
-    }
-    else
-    {
-        <div class="empty-cart">Choose a pizza<br>to get started</div>
-    }
-
-    <div class="order-total @(Order.Pizzas.Any() ? "" : "hidden")">
-        Total:
-        <span class="total-price">@Order.GetFormattedTotalPrice()</span>
-        <a href="checkout" class="btn btn-warning" disabled="@(Order.Pizzas.Count == 0)">
-            Order >
-        </a>
+<div id="Header">
+    <div id="SearchComponent">
+        @*UNDONE:検索コンポーネント*@
+    </div>
+    <div id="MastaComponent">
+        @*UNDONE:マスタ登録*@
+    </div>
+    <div id="MenuComponent">
+        @*UNDONE:メニューコンポーネント*@
     </div>
 </div>
 
-<TemplatedDialog Show="OrderState.ShowingConfigureDialog">
-    <ConfigurePizzaDialog
-        Pizza="OrderState.ConfiguringPizza"
-        OnCancel="OrderState.CancelConfigurePizzaDialog"
-        OnConfirm="OrderState.ConfirmConfigurePizzaDialog" />
-</TemplatedDialog>
+<div>
+    <div>
+        <h3>工数低減結果</h3>
+        <h5>前日までの累計を表示しています。当日の結果は翌日反映されまます。</h5>
+        <MatTable Items="@cars" class="mat-elevation-z5">
+            <MatTableHeader>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Horsepower</th>
+            </MatTableHeader>
+            <MatTableRow>
+                <td>@context.Name</td>
+                <td>@String.Format("${0:f2}", @context.Price)</td>
+                <td>@context.Horsepower</td>
+            </MatTableRow>
+        </MatTable>
+    </div>
+</div>
 
 @code {
-    List<PizzaSpecial> specials;
-    Order Order => OrderState.Order;
-
-    protected async override Task OnInitializedAsync()
+    public class Car
     {
-        specials = await HttpClient.GetJsonAsync<List<PizzaSpecial>>("specials");
-    }
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public int Horsepower { get; set; }
 
-    async Task RemovePizza(Pizza configuredPizza)
-    {
-        if (await JS.Confirm($"Remove {configuredPizza.Special.Name} pizza from the order?"))
+        public Car(string name, double price, int horsepower)
         {
-            OrderState.RemoveConfiguredPizza(configuredPizza);
+            Name = name;
+            Price = price;
+            Horsepower = horsepower;
         }
     }
+
+    Car[] cars = new[]
+    {
+                new Car("Volkswagen Golf", 10000, 220),
+                new Car("Volkswagen Passat", 11000, 240),
+                new Car("Volkswagen Polo", 12000, 110),
+                new Car("Ford Focus", 13000, 200),
+                new Car("Ford Fiesta", 14000, 160),
+                new Car("Ford Fusion", 15000, 260),
+                new Car("Ford Mondeo", 16000, 120),
+            };
 }
