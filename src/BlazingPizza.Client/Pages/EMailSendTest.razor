@@ -1,0 +1,15 @@
+@page "/email"
+@inject HttpClient http
+
+<h3>EMailSend</h3>
+
+<button @onclick="SendTest">Send Test</button>
+
+@code {
+
+    async Task SendTest()
+    {
+        await http.GetAsync($"api/email");
+    }
+
+}

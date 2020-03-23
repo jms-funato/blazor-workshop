@@ -11,7 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlazorCRUDApp.Server.Controllers
+namespace BlazingPizza.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

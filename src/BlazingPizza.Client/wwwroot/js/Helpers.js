@@ -26,3 +26,15 @@ function CustomConfirm(title, message, type) {
         });
     });
 }
+
+function dotnetStaticInvocation() {
+    DotNet.invokeMethodAsync("BlazingPizza.Client", "GetCurrentCount")
+        .then(result => {
+            console.log("count from js " + result);
+        });
+}
+
+function dotnetInstanceInvocation(dotnetHelper) {
+    dotnetHelper.invokeMethodAsync("IncrementCount");
+}
+

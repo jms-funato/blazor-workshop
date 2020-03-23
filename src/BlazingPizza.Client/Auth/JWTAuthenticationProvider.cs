@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.JSInterop;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using BlazingPizza.Client.Helpers;
-using System.Security.Claims;
-using System.Text.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text.Json;
+using System.Threading.Tasks;
+using BlazingPizza.Client.Helpers;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 
 namespace BlazingPizza.Client.Auth
 {

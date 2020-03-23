@@ -1,26 +1,50 @@
 @inherits LayoutComponentBase
 
 <div class="top-bar">
-    <img class="logo" src="img/ANDEN_LOGO.svg" />
+    <img class="logo" src="img/ANDEN_LOGO.svg"/>
 
     <NavLink href="" class="nav-tab" Match="NavLinkMatch.All">
-        <img src="img/pizza-slice.svg" />
+        <img src="img/pizza-slice.svg"/>
         <div>Get Pizza</div>
     </NavLink>
 
     <NavLink href="myorders" class="nav-tab">
-        <img src="img/bike.svg" />
+        <img src="img/bike.svg"/>
         <div>My Orders</div>
     </NavLink>
 
     <NavLink href="people" class="nav-tab">
-        <img src="img/bike.svg" />
+        <img src="img/people-24px.svg"/>
         <div>People Masta</div>
     </NavLink>
 
-    <LoginDisplay />
+    <NavLink href="counter" class="nav-tab">
+        <img src="img/add_circle_outline-black-18dp.svg"/>
+        <div>Counter</div>
+    </NavLink>
+
+    <NavLink href="charttest" class="nav-tab">
+        <img src="img/chart.svg"/>
+        <div>Counter</div>
+    </NavLink>
+
+    <LoginDisplay/>
 </div>
 
-<div class="content">
-    @Body
+@*<div class="content mx-auto px-4" style="margin-bottom: 20px;">*@
+    <div class="mx-auto px-4" style="margin-bottom: 20px;">
+    <CascadingValue Value="@appState">
+        @Body
+    </CascadingValue>
 </div>
+
+@code{
+    AppState appState = new AppState();
+
+    public class AppState
+    {
+        public string Color { get; set; } = "red";
+        public string Size { get; set; } = "12px";
+    }
+
+}

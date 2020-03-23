@@ -5,7 +5,7 @@ using BlazingPizza.Shared.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace BlazingPizza.Client
+namespace BlazingPizza.Client.Auth
 {
     //public class ServerAuthenticationStateProvider : AuthenticationStateProvider
     //{

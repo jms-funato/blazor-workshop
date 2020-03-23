@@ -32,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BlazingPizza.Client\BlazingPizza.Client.csproj" />
     <ProjectReference Include="..\BlazingPizza.Shared\BlazingPizza.Shared.csproj" />
+    <ProjectReference Include="..\EmailService\EmailService.csproj" />
   </ItemGroup>
 
 </Project>

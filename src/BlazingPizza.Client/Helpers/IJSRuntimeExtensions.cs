@@ -49,4 +49,6 @@ namespace BlazingPizza.Client.Helpers
     {
         question, warning, error, success, info
     }
+
+
 }

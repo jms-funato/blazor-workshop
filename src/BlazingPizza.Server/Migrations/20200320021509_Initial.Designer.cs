@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlazingPizza.Server.Migrations
 {
-    [DbContext(typeof(PizzaStoreContext))]
-    [Migration("20200319010805_Initial")]
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20200320021509_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,6 +57,32 @@ namespace BlazingPizza.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Address");
+                });
+
+            modelBuilder.Entity("BlazingPizza.Shared.Models.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Countries");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Dominican Republic"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "United States"
+                        });
                 });
 
             modelBuilder.Entity("BlazingPizza.Shared.Models.NotificationSubscription", b =>
@@ -117,9 +143,70 @@ namespace BlazingPizza.Server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("StateId");
+
                     b.ToTable("People");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 6,
+                            Name = "Person 6",
+                            StateId = 1
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Person 7",
+                            StateId = 1
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Person 8",
+                            StateId = 1
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Person 9",
+                            StateId = 1
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Person 10",
+                            StateId = 1
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "Person 11",
+                            StateId = 1
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "Person 12",
+                            StateId = 1
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "Person 13",
+                            StateId = 1
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "Person 14",
+                            StateId = 1
+                        });
                 });
 
             modelBuilder.Entity("BlazingPizza.Shared.Models.Pizza", b =>
@@ -184,6 +271,51 @@ namespace BlazingPizza.Server.Migrations
                     b.ToTable("PizzaTopping");
                 });
 
+            modelBuilder.Entity("BlazingPizza.Shared.Models.State", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("States");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CountryId = 1,
+                            Name = "Santo Domingo"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CountryId = 1,
+                            Name = "San Cristobal"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CountryId = 2,
+                            Name = "Vermont"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CountryId = 2,
+                            Name = "New York"
+                        });
+                });
+
             modelBuilder.Entity("BlazingPizza.Shared.Models.Topping", b =>
                 {
                     b.Property<int>("Id")
@@ -207,17 +339,24 @@ namespace BlazingPizza.Server.Migrations
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -233,11 +372,14 @@ namespace BlazingPizza.Server.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .IsRequired()
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoleClaims");
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
@@ -249,10 +391,12 @@ namespace BlazingPizza.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Email")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
@@ -264,10 +408,12 @@ namespace BlazingPizza.Server.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -285,11 +431,19 @@ namespace BlazingPizza.Server.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasMaxLength(256);
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -305,56 +459,70 @@ namespace BlazingPizza.Server.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .IsRequired()
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserClaims");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<string>("UserId")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .IsRequired()
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.ToTable("UserLogins");
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("RoleId")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<string>("UserId")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.ToTable("UserRoles");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Value")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.ToTable("UserTokens");
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("BlazingPizza.Shared.Models.Order", b =>
@@ -383,6 +551,15 @@ namespace BlazingPizza.Server.Migrations
                         });
                 });
 
+            modelBuilder.Entity("BlazingPizza.Shared.Models.Person", b =>
+                {
+                    b.HasOne("BlazingPizza.Shared.Models.State", "State")
+                        .WithMany()
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BlazingPizza.Shared.Models.Pizza", b =>
                 {
                     b.HasOne("BlazingPizza.Shared.Models.Order", null)
@@ -409,6 +586,66 @@ namespace BlazingPizza.Server.Migrations
                     b.HasOne("BlazingPizza.Shared.Models.Topping", "Topping")
                         .WithMany()
                         .HasForeignKey("ToppingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BlazingPizza.Shared.Models.State", b =>
+                {
+                    b.HasOne("BlazingPizza.Shared.Models.Country", "Country")
+                        .WithMany("States")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

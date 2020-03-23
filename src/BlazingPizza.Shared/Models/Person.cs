@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace BlazingPizza.Shared.Models
 {
@@ -14,5 +12,9 @@ namespace BlazingPizza.Shared.Models
 
         public string Biography { get; set; }
 
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a state")]
+        public int StateId { get; set; }
+
+        public State State { get; set; }
     }
 }

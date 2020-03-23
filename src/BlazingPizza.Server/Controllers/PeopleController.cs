@@ -15,9 +15,9 @@ namespace BlazingPizza.Server.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PeopleController : ControllerBase
     {
-        private readonly PizzaStoreContext context;
+        private readonly ApplicationDbContext context;
 
-        public PeopleController(PizzaStoreContext context)
+        public PeopleController(ApplicationDbContext context)
         {
             this.context = context;
         }

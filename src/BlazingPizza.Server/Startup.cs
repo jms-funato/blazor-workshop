@@ -2,11 +2,16 @@ using System;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
+using EmailService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -28,17 +33,15 @@ namespace BlazingPizza.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddDbContext<PizzaStoreContext>(options => 
+            //Db Config
+            services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
-
             //services.AddDbContext<PizzaStoreContext>(options => options.UseSqlite("Data Source=pizza.db"));
 
-
+            //Auth Config
             services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<PizzaStoreContext>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
@@ -49,11 +52,27 @@ namespace BlazingPizza.Server
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["jwt:key"])),
                     ClockSkew = TimeSpan.Zero
-                }); 
+                });
 
+            //Email Config
+            var emailConfig = Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailSender, EmailSender>();
+            services.Configure<FormOptions>(o =>
+            {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
+            });
 
-            services.AddMvc()
-                .AddNewtonsoftJson();
+            services.AddBlazorise(options =>
+            {
+                options.ChangeTextOnKeyPress = true; // optional
+            })
+              .AddBootstrapProviders()
+              .AddFontAwesomeIcons();
+
+            services.AddMvc().AddNewtonsoftJson();
 
             services.AddResponseCompression(options =>
             {
@@ -61,6 +80,7 @@ namespace BlazingPizza.Server
                     new[] { MediaTypeNames.Application.Octet });
             });
 
+            //sample oauth twitter
             services
                 .AddAuthentication(options =>
                 {
@@ -92,10 +112,13 @@ namespace BlazingPizza.Server
             app.UseStaticFiles();
             app.UseClientSideBlazorFiles<Client.Startup>();
 
+            app.ApplicationServices
+              .UseBootstrapProviders()
+              .UseFontAwesomeIcons();
+
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            
 
             app.UseEndpoints(endpoints =>
             {

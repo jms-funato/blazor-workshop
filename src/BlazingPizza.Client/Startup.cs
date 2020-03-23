@@ -2,6 +2,10 @@ using BlazingPizza.Client.Auth;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
+
 
 namespace BlazingPizza.Client
 {
@@ -10,6 +14,9 @@ namespace BlazingPizza.Client
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<OrderState>();
+
+            services.AddSingleton<SingletionService>();
+            services.AddTransient<TransientService>();
 
             // Add auth services
             services.AddAuthorizationCore();
@@ -22,7 +29,18 @@ namespace BlazingPizza.Client
 
             //services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
             //services.AddScoped<AuthenticationStateProvider, DummyAuthStateProvider>();
+
+
+            //Blazorise
+            services.AddBlazorise(options =>
+            {
+                options.ChangeTextOnKeyPress = true;
+            })
+               .AddBootstrapProviders()
+               .AddFontAwesomeIcons();
         }
+
+
 
         public void Configure(IComponentsApplicationBuilder app)
         {
