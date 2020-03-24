@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 @attribute [Authorize]
 @inject HttpClient http
 @inject NavigationManager navi
@@ -11,27 +11,33 @@
     <div id="MastaComponent">
         @*UNDONE:マスタ登録*@
     </div>
-    <div id="MenuComponent">
         @*UNDONE:メニューコンポーネント*@
-    </div>
+        <MastaSection/>
 </div>
+<br />
+
+<div>
+    <MenuSteps/>
+</div>
+<br />
 
 <div>
     <div>
         <h3>工数低減結果</h3>
         <h5>前日までの累計を表示しています。当日の結果は翌日反映されまます。</h5>
-        <MatTable Items="@cars" class="mat-elevation-z5">
-            <MatTableHeader>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Horsepower</th>
-            </MatTableHeader>
-            <MatTableRow>
-                <td>@context.Name</td>
-                <td>@String.Format("${0:f2}", @context.Price)</td>
-                <td>@context.Horsepower</td>
-            </MatTableRow>
-        </MatTable>
+
+        <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="4"
+                    AllowSorting="true" Data="@cars" TItem="Car" ColumnWidth="200px">
+            <Columns>
+                <RadzenGridColumn TItem="Car" Property="@(nameof(Car.Name))" Title="@(nameof(Car.Name))"/>
+                <RadzenGridColumn TItem="Car" Property="@(nameof(Car.Price))" Title="@(nameof(Car.Price))">
+                    <Template Context="data">
+                        @($"{data.Price:C}")
+                    </Template>
+                </RadzenGridColumn>
+                <RadzenGridColumn TItem="Car" Property="@(nameof(Car.Horsepower))" Title="@(nameof(Car.Horsepower))"/>
+            </Columns>
+        </RadzenGrid>
     </div>
 </div>
 

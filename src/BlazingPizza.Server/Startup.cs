@@ -19,6 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Toolbelt.Extensions.DependencyInjection;
 
 namespace BlazingPizza.Server
 {
@@ -107,6 +108,7 @@ namespace BlazingPizza.Server
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBlazorDebugging();
+                app.UseCssLiveReload();
             }
 
             app.UseStaticFiles();

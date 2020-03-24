@@ -1,0 +1,74 @@
+<div class="container">
+    <div class="row">
+        <div class="f-container col-md-3">
+            <h3>マスタ登録</h3>
+            <br/>
+            <ul class="mastalist">
+                <li>
+                    <RadzenButton Click="@((args) => Click(args, "Secondary button"))" Text="ライン情報" ButtonStyle="ButtonStyle.Secondary" Style="margin-bottom: 20px; width: 150px;font-size:10px;"/>
+                </li>
+                <li>
+                    <RadzenButton Click="@((args) => Click(args, "Secondary button"))" Text="ライン人員" ButtonStyle="ButtonStyle.Secondary" Style="margin-bottom: 20px; width: 150px;font-size:10px;"/>
+                </li>
+                <li>
+                    <RadzenButton Click="@((args) => Click(args, "Secondary button"))" Text="ユーザー権限" ButtonStyle="ButtonStyle.Secondary" Style="margin-bottom: 20px; width: 150px;font-size:10px;"/>
+                </li>
+                <li>
+                    <RadzenButton Click="@((args) => Click(args, "Secondary button"))" Text="品番タイプ" ButtonStyle="ButtonStyle.Secondary" Style="margin-bottom: 20px; width: 150px;font-size:10px;"/>
+                </li>
+                <li>
+                    <RadzenButton Click="@((args) => Click(args, "Secondary button"))" Text="ラインコード" ButtonStyle="ButtonStyle.Secondary" Style="margin-bottom: 20px; width: 150px;font-size:10px;"/>
+                </li>
+                @*<li>
+                        <RadzenSplitButton Click="@((args) => Click(args, "SplitButton with text and icon"))" Text="一括入力" Icon="create" Style="margin-bottom: 20px; color: white;font-size:10px;">
+                            <ChildContent>
+                                <RadzenSplitButtonItem Text="作業時間" Value="1" Icon="schedule"/>
+                                <RadzenSplitButtonItem Text="応受援" Value="2" Icon="transfer_within_a_station"/>
+                                <RadzenSplitButtonItem Text="除外時間" Value="3" Icon="remove-circle"/>
+                            </ChildContent>
+                        </RadzenSplitButton>
+                    </li>*@
+                <li>
+                    <MatButton Raised="true" Label="一括入力▽" OnClick="@OnClick" RefBack="@buttonForwardRef" Style="font-size:10px;"/>
+                    <MatMenu @ref="Menu" TargetForwardRef="@buttonForwardRef">
+                        <MatList>
+                            <MatListItem Style="font-size:10px;">作業時間</MatListItem>
+                            <MatListItem>応受援</MatListItem>
+                            <MatListItem>除外時間</MatListItem>
+                        </MatList>
+                    </MatMenu>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@code {
+    ForwardRef buttonForwardRef = new ForwardRef();
+    BaseMatMenu Menu;
+
+    public void OnClick(MouseEventArgs e)
+    {
+        this.Menu.OpenAsync();
+    }
+
+    //Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
+
+    void Click(MouseEventArgs args, string buttonName)
+    {
+        //events.Add(DateTime.Now, $"{buttonName} clicked");
+        //StateHasChanged();
+    }
+
+    void Click(RadzenSplitButtonItem item, string buttonName)
+    {
+        //if (item != null)
+        //{
+        //    events.Add(DateTime.Now, $"{buttonName}, item with value {item.Value} clicked");
+        //}
+        //else
+        //{
+        //    events.Add(DateTime.Now, $"{buttonName} clicked");
+        //}
+    }
+}

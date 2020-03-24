@@ -1,11 +1,10 @@
 using BlazingPizza.Client.Auth;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
-
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BlazingPizza.Client
 {
@@ -26,10 +25,8 @@ namespace BlazingPizza.Client
             services.AddScoped<ILoginService, JWTAuthenticationProvider>(
                 provider => provider.GetRequiredService<JWTAuthenticationProvider>());
 
-
             //services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
             //services.AddScoped<AuthenticationStateProvider, DummyAuthStateProvider>();
-
 
             //Blazorise
             services.AddBlazorise(options =>
@@ -39,8 +36,6 @@ namespace BlazingPizza.Client
                .AddBootstrapProviders()
                .AddFontAwesomeIcons();
         }
-
-
 
         public void Configure(IComponentsApplicationBuilder app)
         {
