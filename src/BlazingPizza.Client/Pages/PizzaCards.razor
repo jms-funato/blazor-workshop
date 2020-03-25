@@ -1,9 +1,9 @@
-﻿@page "/pizzacards"
+@page "/pizzacards"
 @attribute [Authorize]
 @inject HttpClient HttpClient
 @inject OrderState OrderState
 @inject NavigationManager NavigationManager
-@inject IJSRuntime JS
+@inject IJSRuntime js
 
 <div class="main">
     <ul class="pizza-cards">
@@ -67,7 +67,7 @@
 
     async Task RemovePizza(Pizza configuredPizza)
     {
-        if (await JS.Confirm($"Remove {configuredPizza.Special.Name} pizza from the order?"))
+        if (await js.Confirm($"Remove {configuredPizza.Special.Name} pizza from the order?"))
         {
             OrderState.RemoveConfiguredPizza(configuredPizza);
         }

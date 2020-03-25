@@ -1,68 +1,65 @@
 @page "/people"
-@inject HttpClient http
-@inject IJSRuntime js
-@using System.IO
-@using System.Text.Json
 
-<h3>People</h3>
+<div id="datagridview">
+    <h1 class="dgv-title">@nameof(Person) マスタ</h1>
+    <br/>
+    <div class="dgv-nav">
+        <AuthorizeView>
+            <Authorized>
+                <div>
+                    <a class="btn btn-success" href="people/create">新規追加</a>
+                </div>
+            </Authorized>
+        </AuthorizeView>
 
-<AuthorizeView>
-    <Authorized>
-        <div>
-            <a class="btn btn-success" href="people/create">New Person</a>
+        <div class="form-inline">
+            <label class="sr-only" for="filter-name">Filter</label>
+            <input type="text" class="form-control mb-2 mr-sm-2" placeholder="検 索" @bind="nameFilter"/>
+            <button type="button" class="btn btn-primary mr-sm-2 mb-2" @onclick="Filter">絞り込み</button>
+            <button type="button" class="btn btn-danger mr-sm-2 mb-2" @onclick="Clear">クリア</button>
         </div>
-    </Authorized>
-</AuthorizeView>
 
-<div class="form-inline">
-    <label class="sr-only" for="filter-name">Filter</label>
-    <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Filter by Name"
-           @bind="nameFilter"/>
-    <button type="button" class="btn btn-primary mr-sm-2 mb-2"
-            @onclick="Filter">
-        Filter
-    </button>
-    <button type="button" class="btn btn-danger mr-sm-2 mb-2"
-            @onclick="Clear">
-        Clear
-    </button>
-</div>
-
-<PaginationTest TotaPagesQuantity="totalPageQuantity" CurrentPage="currentPage" Radius="2" SelectedPage="SelectedPage"></PaginationTest>
-
-<div>
+        <PaginationTest TotaPagesQuantity="totalPageQuantity" CurrentPage="currentPage" Radius="2" SelectedPage="SelectedPage"></PaginationTest>
+    </div>
+    <br/>
     <GenericList Elements="people">
         <NullTemplate>
-            <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"/>
+            <div class="loading-bar"/>
         </NullTemplate>
         <WithElementsTemplate>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Id</th>
-                        <th>Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var person in people)
-                    {
-                        <tr>
-                            <td>
-                                <AuthorizeView>
-                                    <Authorized>
-                                        <a class="btn btn-success" href="people/edit/@person.Id">Edit</a>
-                                        <button class="btn btn-danger" @onclick="@(()=>DeletePerson(person.Id))">Delete</button>
-                                    </Authorized>
-                                </AuthorizeView>
-                            </td>
-                            <td>@person.Id</td>
-                            <td>@person.Name</td>
+            <div class="table-scroll-host">
+                <table>
+                    <thead>
+                        <tr>                            
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>dummy1</th>
+                            <th>dummy2</th>
+                            @*<th></th>*@
                         </tr>
-                    }
-                </tbody>
-            </table>
-            <button @onclick="ExportAsCSV">Export as CSV</button>
+                    </thead>
+                    <tbody>
+                        @foreach (var person in people)
+                        {
+                            <tr>
+                                <td>@person.Id</td>
+                                <td>@person.Name</td>
+                                <td>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</td>
+                                <td>yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy</td>
+                                @*<td>
+                                    <AuthorizeView>
+                                        <Authorized>
+                                            <a class="btn btn-success" href="people/edit/@person.Id">Edit</a>
+                                            <button class="btn btn-danger" @onclick="@(()=>DeletePerson(person.Id))">Delete</button>
+                                        </Authorized>
+                                    </AuthorizeView>
+                                </td>*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @*<button @onclick="ExportAsCSV">Export as CSV</button>*@
         </WithElementsTemplate>
     </GenericList>
 
@@ -74,81 +71,3 @@
             </Columns>
         </RadzenGrid>*@
 </div>
-
-@code {
-    List<Person> people { get; set; }
-    private int totalPageQuantity;
-    private int currentPage = 1;
-    private string nameFilter = string.Empty;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadPeople();
-    }
-
-    private async Task SelectedPage(int page)
-    {
-        currentPage = page;
-        await LoadPeople(page);
-    }
-
-    private async Task Filter()
-    {
-        currentPage = 1;
-        await LoadPeople();
-    }
-
-    private async Task Clear()
-    {
-        nameFilter = string.Empty;
-        currentPage = 1;
-        await LoadPeople();
-    }
-
-    async Task LoadPeople(int page = 1, int quantityPerPage = 10)
-    {
-        var httpResponse = await http.GetAsync($"api/people?page={page}&quantityPerPage={quantityPerPage}&name={nameFilter}");
-        if (httpResponse.IsSuccessStatusCode)
-        {
-            totalPageQuantity = int.Parse(httpResponse.Headers.GetValues("pagesQuantity").FirstOrDefault());
-            var responseString = await httpResponse.Content.ReadAsStringAsync();
-            people = JsonSerializer.Deserialize<List<Person>>(responseString,
-                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-        }
-        else
-        {
-            // handle error
-        }
-
-    }
-
-    async Task DeletePerson(int personId)
-    {
-        //await js.DisplayMessage("削除確認","削除しますか?",SweetAlertMessageType.success);
-        var personSeleted = people.First(x => x.Id == personId);
-        if (await js.Confirm("ユーザー削除", $"ユーザー:{personSeleted.Name}を削除しますか?", SweetAlertMessageType.question))
-        {
-            await http.DeleteAsync($"api/people/{personId}");
-            await LoadPeople();
-        }
-
-    }
-
-    private void ExportAsCSV()
-    {
-        using (var ms = new MemoryStream())
-        {
-            using (var writer = new StreamWriter(ms))
-            {
-                using (var csv = new CsvHelper.CsvWriter(writer, System.Globalization.CultureInfo.InvariantCulture))
-                {
-                    csv.WriteRecords(people);
-                }
-            }
-
-            var arr = ms.ToArray();
-            js.SaveAs("people.csv", arr);
-        }
-    }
-
-}

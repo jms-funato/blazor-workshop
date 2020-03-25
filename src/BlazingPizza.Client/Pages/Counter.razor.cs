@@ -22,7 +22,7 @@ namespace BlazingPizza.Client.Pages
         [JSInvokable]
         public async Task IncrementCount()
         {
-            var authState = await AuthenticationState;
+            var authState = await AuthenticationState.ConfigureAwait(false);
             var user = authState.User;
 
             if (user.Identity.IsAuthenticated)

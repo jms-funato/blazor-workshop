@@ -20,6 +20,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="$(BlazorVersion)" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="$(BlazorVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="3.1.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Radzen.Blazor" Version="2.4.0" />
   </ItemGroup>
 

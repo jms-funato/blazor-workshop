@@ -2,7 +2,9 @@
     <div>開始</div>
     @foreach (var item in menuList)
     {
-        <a href=@item.Refpage class="pointer" style="z-index:@item.Step;">@item.Name</a>
+        <div id="pointerframe">
+            <a href=@item.Refpage style="z-index:@item.Step;">@item.Name</a>
+        </div>
     }
     <div style="margin-left:20px;">終了</div>
 </div>

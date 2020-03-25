@@ -6,6 +6,11 @@ namespace BlazingPizza.Client.Helpers
 {
     public static class IJSRuntimeExtensions
     {
+        public static ValueTask<bool> Confirm(this IJSRuntime jsRuntime, string message)
+        {
+            return jsRuntime.InvokeAsync<bool>("confirm", message);
+        }
+
         public static ValueTask SaveAs(this IJSRuntime js, string filename, byte[] content)
         {
             return js.InvokeVoidAsync("saveAsFile", filename, Convert.ToBase64String(content));
