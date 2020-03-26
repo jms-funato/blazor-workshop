@@ -1,4 +1,5 @@
 using BlazingPizza.Client.Auth;
+using Blazored.LocalStorage;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
@@ -12,8 +13,7 @@ namespace BlazingPizza.Client
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<OrderState>();
-
+         
             services.AddSingleton<SingletionService>();
             services.AddTransient<TransientService>();
 
@@ -25,8 +25,7 @@ namespace BlazingPizza.Client
             services.AddScoped<ILoginService, JWTAuthenticationProvider>(
                 provider => provider.GetRequiredService<JWTAuthenticationProvider>());
 
-            //services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
-            //services.AddScoped<AuthenticationStateProvider, DummyAuthStateProvider>();
+            services.AddBlazoredLocalStorage();
 
             //Blazorise
             services.AddBlazorise(options =>

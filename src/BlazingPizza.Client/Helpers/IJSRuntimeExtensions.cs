@@ -1,4 +1,4 @@
-﻿using Microsoft.JSInterop;
+using Microsoft.JSInterop;
 using System;
 using System.Threading.Tasks;
 
@@ -48,6 +48,12 @@ namespace BlazingPizza.Client.Helpers
             => js.InvokeVoidAsync(
                 "localStorage.removeItem",
                 key);
+
+        //public static ValueTask TableSetting(this IJSRuntime js)
+        //{
+        //    return js.InvokeVoidAsync("addTableScroll");
+        //}
+
     }
 
     public enum SweetAlertMessageType

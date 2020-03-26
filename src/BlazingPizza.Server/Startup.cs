@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
+using Blazored.LocalStorage;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;

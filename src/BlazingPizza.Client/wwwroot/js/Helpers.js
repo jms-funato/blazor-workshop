@@ -38,3 +38,10 @@ function dotnetInstanceInvocation(dotnetHelper) {
     dotnetHelper.invokeMethodAsync("IncrementCount");
 }
 
+//function addTableScroll() {
+//    $('#dtHorizontalVerticalExample').DataTable({
+//        "scrollX": true,
+//        "scrollY": 200,
+//    });
+//    $('.dataTables_length').addClass('bs-select');
+//};

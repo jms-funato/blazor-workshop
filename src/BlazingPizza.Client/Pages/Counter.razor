@@ -1,4 +1,4 @@
-﻿@page "/counter"
+@page "/counter"
 @attribute [Authorize]
 
 <h1 style="color:@AppState.Color; font-size: @AppState.Size">Counter</h1>
@@ -24,7 +24,7 @@
 <p>Current count: @currentCount</p>
 <p>Singleton count: @singletion.Value</p>
 <p>Transient count: @transient.Value</p>
-
+@*<span style="color:#c00;">@SessionValue</span>*@
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 <button class="btn btn-primary" @onclick="IncrementCountJavaScript">Click me JavaScript</button>

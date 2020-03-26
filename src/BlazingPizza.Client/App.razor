@@ -6,13 +6,18 @@
                     <RedirectToLogin/>
                 </NotAuthorized>
                 <Authorizing>
-                    <div class="main">Please wait...</div>
+                    <div class="loading-bar"/>
                 </Authorizing>
             </AuthorizeRouteView>
         </Found>
         <NotFound>
             <LayoutView Layout="typeof(MainLayout)">
-                <div class="main">Page not found</div>
+                <div class="content">
+                    <h1>PAGE NOT FOUND</h1>
+                    <p>
+                        The page you have requested could not be found. <a href="/">Return to the home page.</a>
+                    </p>
+                </div>
             </LayoutView>
         </NotFound>
     </Router>

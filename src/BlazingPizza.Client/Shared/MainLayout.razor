@@ -1,6 +1,6 @@
 @inherits LayoutComponentBase
 
-<div class="top-bar">
+<header>
     <div style="display:inline-flex" class="d-flex align-items-center justify-content-center">
         <a href=""><img class="logo" src="img/ANDEN_LOGO_light.svg"></a>
         <h3 class="m-2">工数管理指標WEB</h3>
@@ -8,22 +8,18 @@
     </div>
 
     <NavLink href="" class="nav-tab" Match="NavLinkMatch.All">
-        <img src="img/pizza-slice.svg"/>
+        <RadzenIcon Icon="home" Style="color:white;font-size:48px"/>
         <div>TOP</div>
     </NavLink>
 
-    <NavLink href="myorders" class="nav-tab">
-        <img src="img/bike.svg"/>
-        <div>My Orders</div>
-    </NavLink>
-
     <NavLink href="people" class="nav-tab">
-        <RadzenIcon Icon="people" Style="color:white;font-size:48px"/>
+        @*<RadzenIcon Icon="people" Style="color:white;font-size:48px"/>*@
+        <img src="img/database-light.svg"/>
         <div>People Masta</div>
     </NavLink>
 
     <NavLink href="counter" class="nav-tab">
-        <RadzenIcon Icon="add_circle_outline" Style="color:white;font-size:48px" />
+        <RadzenIcon Icon="add_circle_outline" Style="color:white;font-size:48px"/>
         <div>Counter</div>
     </NavLink>
 
@@ -33,13 +29,17 @@
     </NavLink>
 
     <LoginDisplay/>
-</div>
+</header>
 
-@*<div>*@
+<div class="content">
     <CascadingValue Value="@appState">
         @Body
     </CascadingValue>
-@*</div>*@
+</div>
+
+<footer>
+    <p>AD-PHI</p>
+</footer>
 
 @code{
     AppState appState = new AppState();

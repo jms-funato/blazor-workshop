@@ -1,27 +1,36 @@
 @page "/"
 @attribute [Authorize]
-@inject HttpClient http
-@inject NavigationManager navi
-@inject IJSRuntime js
 
-<div id="Header">
-    <div id="SearchComponent">
-        @*UNDONE:検索コンポーネント*@
-    </div>
-    <div id="MastaComponent">
-        @*UNDONE:マスタ登録*@
-    </div>
+<div class="content">
+
+    <div id="Header">
+        <div id="SearchComponent">
+            @*UNDONE:検索コンポーネント*@
+        </div>
+        <div id="MastaComponent">
+            @*UNDONE:マスタ登録*@
+        </div>
         @*UNDONE:メニューコンポーネント*@
         <MastaSection/>
-</div>
-<br />
+    </div>
+    <br/>
 
-<div>
-    <MenuSteps/>
-</div>
-<br />
+    <div>
+        <MenuSteps/>
+    </div>
+    <br/>
 
-<div>
+    @*localstrage sample*@
+    @*<div>
+            <input type="text" @bind="SessionValue" class="form-control"/>
+            <br/>
+            <Button class="btn btn-success" @onclick="SaveSession">Session Save</Button>
+            <Button class="btn btn-danger" @onclick="ClearSession">Session Clear</Button>
+            <br/>
+            <br/>
+            <span style="color:#c00;">@Message</span>
+        </div>*@
+
     <div>
         <h3>工数低減結果</h3>
         <h5>前日までの累計を表示しています。当日の結果は翌日反映されまます。</h5>
@@ -40,30 +49,3 @@
         </RadzenGrid>
     </div>
 </div>
-
-@code {
-    public class Car
-    {
-        public string Name { get; set; }
-        public double Price { get; set; }
-        public int Horsepower { get; set; }
-
-        public Car(string name, double price, int horsepower)
-        {
-            Name = name;
-            Price = price;
-            Horsepower = horsepower;
-        }
-    }
-
-    Car[] cars = new[]
-    {
-                new Car("Volkswagen Golf", 10000, 220),
-                new Car("Volkswagen Passat", 11000, 240),
-                new Car("Volkswagen Polo", 12000, 110),
-                new Car("Ford Focus", 13000, 200),
-                new Car("Ford Fiesta", 14000, 160),
-                new Car("Ford Fusion", 15000, 260),
-                new Car("Ford Mondeo", 16000, 120),
-            };
-}

@@ -1,6 +1,6 @@
 @page "/people"
 
-<div id="datagridview">
+<div>
     <h1 class="dgv-title">@nameof(Person) マスタ</h1>
     <br/>
     <div class="dgv-nav">
@@ -27,37 +27,39 @@
             <div class="loading-bar"/>
         </NullTemplate>
         <WithElementsTemplate>
-            <div class="table-scroll-host">
-                <table>
-                    <thead>
-                        <tr>                            
-                            <th>Id</th>
-                            <th>Name</th>
-                            <th>dummy1</th>
-                            <th>dummy2</th>
-                            @*<th></th>*@
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var person in people)
-                        {
+            <div class="container">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" style="white-space:nowrap;overflow:scroll;">
+                        <thead class="thead-dark">
                             <tr>
-                                <td>@person.Id</td>
-                                <td>@person.Name</td>
-                                <td>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</td>
-                                <td>yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy</td>
-                                @*<td>
-                                    <AuthorizeView>
-                                        <Authorized>
-                                            <a class="btn btn-success" href="people/edit/@person.Id">Edit</a>
-                                            <button class="btn btn-danger" @onclick="@(()=>DeletePerson(person.Id))">Delete</button>
-                                        </Authorized>
-                                    </AuthorizeView>
-                                </td>*@
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>dummy1</th>
+                                <th>dummy2</th>
+                                @*<th></th>*@
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var person in people)
+                            {
+                                <tr>
+                                    <td>@person.Id</td>
+                                    <td>@person.Name</td>
+                                    <td>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</td>
+                                    <td>yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy</td>
+                                    @*<td>
+                                            <AuthorizeView>
+                                                <Authorized>
+                                                    <a class="btn btn-success" href="people/edit/@person.Id">Edit</a>
+                                                    <button class="btn btn-danger" @onclick="@(()=>DeletePerson(person.Id))">Delete</button>
+                                                </Authorized>
+                                            </AuthorizeView>
+                                        </td>*@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
             @*<button @onclick="ExportAsCSV">Export as CSV</button>*@
         </WithElementsTemplate>

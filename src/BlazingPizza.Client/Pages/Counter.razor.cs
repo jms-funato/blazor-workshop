@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
@@ -13,11 +13,19 @@ namespace BlazingPizza.Client.Pages
         [Inject] private SingletionService singletion { get; set; }
         [Inject] private TransientService transient { get; set; }
         [Inject] private IJSRuntime js { get; set; }
+        [Inject] private Blazored.LocalStorage.ILocalStorageService oLocalStore { get; set; }
 
         private int currentCount = 0;
         private static int currentCountStatic = 0;
 
         [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; }
+
+        string SessionValue = "";
+        protected override async Task OnInitializedAsync()
+        {
+            SessionValue = await oLocalStore.GetItemAsync<string>("MySessionValue");
+        }
+
 
         [JSInvokable]
         public async Task IncrementCount()

@@ -1,11 +1,11 @@
 ﻿{
-  "short_name": "Blazing Pizza",
-  "name": "Blazing Pizza",
+  "short_name": "AD-PHI",
+  "name": "ANDEN 工数管理指標WEB",
   "icons": [
     {
-      "src": "img/icon-512.png",
+      "src": "img/AD_LOGO-light.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "151x133"
     }
   ],
   "start_url": "/",
