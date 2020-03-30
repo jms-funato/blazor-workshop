@@ -1,0 +1,52 @@
+@page "/"
+@attribute [Authorize]
+
+<div class="content">
+
+    <div id="Header">
+        <div id="SearchComponent">
+            @*UNDONE:検索コンポーネント*@
+        </div>
+        <div id="MastaComponent">
+            @*UNDONE:マスタ登録*@
+        </div>
+        @*UNDONE:メニューコンポーネント*@
+        <MastaSection />
+    </div>
+    <br />
+
+    <div>
+        <MenuSteps />
+    </div>
+    <br />
+
+    @*localstrage sample*@
+    @*<div>
+            <input type="text" @bind="SessionValue" class="form-control"/>
+            <br/>
+            <Button class="btn btn-success" @onclick="SaveSession">Session Save</Button>
+            <Button class="btn btn-danger" @onclick="ClearSession">Session Clear</Button>
+            <br/>
+            <br/>
+            <span style="color:#c00;">@Message</span>
+        </div>*@
+
+    <div>
+        <h3>工数低減結果</h3>
+        <h5>前日までの累計を表示しています。当日の結果は翌日反映されまます。</h5>
+
+        <RadzenGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowPaging="true" PageSize="4"
+                    AllowSorting="true" Data="@cars" TItem="Car" ColumnWidth="200px">
+            <Columns>
+                <RadzenGridColumn TItem="Car" Property="@(nameof(Car.Name))" Title="@(nameof(Car.Name))" />
+                <RadzenGridColumn TItem="Car" Property="@(nameof(Car.Price))" Title="@(nameof(Car.Price))">
+                    <Template Context="data">
+                        @($"{data.Price:C}")
+                    </Template>
+                </RadzenGridColumn>
+                <RadzenGridColumn TItem="Car" Property="@(nameof(Car.Horsepower))" Title="@(nameof(Car.Horsepower))" />
+            </Columns>
+        </RadzenGrid>
+    </div>
+</div>
+

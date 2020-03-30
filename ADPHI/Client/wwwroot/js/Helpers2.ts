@@ -1,0 +1,7 @@
+﻿namespace ISInteropWithTS {
+
+    class ExFunc {
+
+    }
+
+}
