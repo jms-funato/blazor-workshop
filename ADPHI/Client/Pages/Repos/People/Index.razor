@@ -1,8 +1,9 @@
 @page "/people"
 
+<Title>Personマスタ</Title>
 <div>
     <h1 class="dgv-title">@nameof(Person) マスタ</h1>
-    <br/>
+    <br />
     <div class="dgv-nav">
         <AuthorizeView>
             <Authorized>
@@ -14,17 +15,18 @@
 
         <div class="form-inline">
             <label class="sr-only" for="filter-name">Filter</label>
-            <input type="text" class="form-control mb-2 mr-sm-2" placeholder="検 索" @bind="nameFilter"/>
-            <button type="button" class="btn btn-primary mr-sm-2 mb-2" @onclick="Filter">絞り込み</button>
+            <input type="text" class="form-control mb-2 mr-sm-2" placeholder="検 索" @bind="nameFilter" />
+            <button type="button" class="btn btn-secondary mr-sm-2 mb-2" @onclick="Filter">絞り込み</button>
             <button type="button" class="btn btn-danger mr-sm-2 mb-2" @onclick="Clear">クリア</button>
+            <button class="btn btn-info  mr-sm-2 mb-2" @onclick="ExportAsCSV">Export as CSV</button>
         </div>
 
         <PaginationTest TotaPagesQuantity="totalPageQuantity" CurrentPage="currentPage" Radius="2" SelectedPage="SelectedPage"></PaginationTest>
     </div>
-    <br/>
+    <br />
     <GenericList Elements="people">
         <NullTemplate>
-            <div class="loading-bar"/>
+            <div class="loading-bar" />
         </NullTemplate>
         <WithElementsTemplate>
             <div class="container">
@@ -34,9 +36,10 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Name</th>
+                                <th>Biography</th>
                                 <th>dummy1</th>
                                 <th>dummy2</th>
-                                @*<th></th>*@
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,23 +48,23 @@
                                 <tr>
                                     <td>@person.Id</td>
                                     <td>@person.Name</td>
+                                    <td>@person.Biography</td>
                                     <td>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</td>
                                     <td>yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy</td>
-                                    @*<td>
-                                            <AuthorizeView>
-                                                <Authorized>
-                                                    <a class="btn btn-success" href="people/edit/@person.Id">Edit</a>
-                                                    <button class="btn btn-danger" @onclick="@(()=>DeletePerson(person.Id))">Delete</button>
-                                                </Authorized>
-                                            </AuthorizeView>
-                                        </td>*@
+                                    <td>
+                                        <AuthorizeView>
+                                            <Authorized>
+                                                <a class="btn btn-success" href="people/edit/@person.Id">Edit</a>
+                                                <button class="btn btn-danger" @onclick="@(()=>DeletePerson(person.Id))">Delete</button>
+                                            </Authorized>
+                                        </AuthorizeView>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
             </div>
-            @*<button @onclick="ExportAsCSV">Export as CSV</button>*@
         </WithElementsTemplate>
     </GenericList>
 
