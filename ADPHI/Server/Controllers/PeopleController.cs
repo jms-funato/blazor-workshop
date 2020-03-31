@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ADPHI.Server.Helpers;
+using ADPHI.Server.Utility;
 using ADPHI.Shared.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,6 +38,15 @@ namespace ADPHI.Server.Controllers
             return await queryable.Paginate(pagination).ToListAsync();
         }
 
+        [HttpGet]
+        [Route("GetPeople")]
+        [AllowAnonymous]
+        public object GetPeople()
+        {
+            return QueryBuilder<Person>.GetList(new Person());
+        }
+
+
         [HttpGet("{id}", Name = "GetPerson")]
         [AllowAnonymous]
         public async Task<ActionResult<Person>> Get(int id)
@@ -46,6 +57,8 @@ namespace ADPHI.Server.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(Person person)
         {
+
+            //EntityFrameworkCore (SqlServer,MySql)
             context.Add(person);
             await context.SaveChangesAsync();
             return new CreatedAtRouteResult("GetPerson", new { id = person.Id }, person);
@@ -62,9 +75,15 @@ namespace ADPHI.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
+
+            //EF Core 3 
             var person = new Person { Id = id };
             context.Remove(person);
             await context.SaveChangesAsync();
+
+
+
+
             return NoContent();
         }
 

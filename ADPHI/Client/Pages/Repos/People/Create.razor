@@ -1,11 +1,11 @@
-﻿@page "/people/create"
+@page "/people/create"
 @inject HttpClient http
 @inject NavigationManager NavigationManager
 @attribute [Authorize]
 
 <h3>People/Create</h3>
 
-<PersonForm ButtonText="Create Person" Person="@person" OnValidSubmit="@CreatePerson"/>
+<PersonForm ButtonText="Create Person" Person="@person" OnValidSubmit="@CreatePerson" />
 
 
 @code {
@@ -18,7 +18,8 @@
 
     async Task CreatePerson()
     {
-        await http.PostJsonAsync("api/people",person);
+        await http.PostJsonAsync("api/people", person);
+
         NavigationManager.NavigateTo("people");
     }
 }

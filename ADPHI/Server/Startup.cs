@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
-using Blazored.LocalStorage;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
@@ -22,6 +21,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Toolbelt.Extensions.DependencyInjection;
 
+
 namespace ADPHI.Server
 {
     public class Startup
@@ -37,8 +37,17 @@ namespace ADPHI.Server
         {
             //Db Config
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseMySql(Configuration.GetConnectionString("ConMySql")));
             //services.AddDbContext<PizzaStoreContext>(options => options.UseSqlite("Data Source=pizza.db"));
+
+
+            //Dapper ConnectionConfiguration
+            //services.AddScoped<IDbService, DbService>();
+            //var dapperSqlConnectionConfiguration = new SqlConnectionConfiguration(Configuration.GetConnectionString("ConMySql"));
+            //services.AddSingleton(dapperSqlConnectionConfiguration);
+            //services.AddServerSideBlazor(o => o.DetailedErrors = true);
+
+
 
             //Auth Config
             services.AddIdentity<IdentityUser, IdentityRole>()
@@ -75,7 +84,6 @@ namespace ADPHI.Server
               .AddFontAwesomeIcons();
 
             services.AddMvc().AddNewtonsoftJson();
-
             services.AddResponseCompression(options =>
             {
                 options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(

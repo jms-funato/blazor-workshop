@@ -6,6 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ADPHI.Server
 {
+
+    //Dapper
+    //public class SqlConnectionConfiguration
+    //{
+    //    public SqlConnectionConfiguration(string value) => Value = value;
+    //    public string Value { get; }
+    //}
+
+
     public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext()
